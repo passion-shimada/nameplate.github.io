@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>名札ジェネレータ</title>
+  <style>
+    /* ----- 全体のスタイル ----- */
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: inline-block;
+      width: 100px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    input[type="text"] {
+      width: 200px;
+      margin-bottom: 10px;
+    }
+
+    .button-area {
+      margin: 10px 0 20px;
+    }
+
+    /* ----- プレビュー領域 ----- */
+    #card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ----- 名札本体のデザイン ----- */
+    .business-card {
+      width: 90mm;         /* 名刺の横幅 */
+      height: 55mm;        /* 名刺の縦幅 */
+      box-sizing: border-box;
+      padding: 10px;
+      position: relative;  /* ロゴ画像を絶対配置するため */
+      border: 1px dotted #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ロゴ画像を左上に配置 */
+    .logo {
+      position: absolute;
+      top: 8px;
+      left: 5px;
+      width: 70px;   /* ロゴの幅。必要に応じて調整 */
+      height: auto;
+    }
+
+    /* テキスト全体をひとまとめにして少し下げる */
+    .text-container {
+      margin-top: 30px; /* 必要に応じて値を調整 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 名前を大きく、太字に */
+    .name {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* カテゴリーをグレーに */
+    .category {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
+    /* 法人名を赤い太字に */
+    .corporate {
+      font-size: 14px;
+      color: red;
+      font-weight: bold;
+    }
+
+    /* ----- 印刷時の設定 ----- */
+    @media print {
+      body {
+        margin: 0;
+      }
+      .button-area, form {
+        display: none; /* 印刷時はフォームを非表示 */
+      }
+      #card-container {
+        display: block;
+      }
+      .business-card {
+        page-break-after: always;
+        margin: 0 auto;
+        border: 1px dotted #000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>名札ジェネレータ</h1>
+<form>
+  <div>
+    <label for="name">名前</label>
+    <input type="text" id="name" name="name" placeholder="パッション島田">
+  </div>
+  <div>
+    <label for="category">カテゴリー</label>
+    <input type="text" id="category" name="category" placeholder="生成AIプロンプト">
+  </div>
+  <div>
+    <label for="corporate">法人名</label>
+    <input type="text" id="corporate" name="corporate" placeholder="○○株式会社">
+  </div>
+</form>
+
+<div class="button-area">
+  <button type="button" onclick="generateCard()">名札を作成</button>
+</div>
+
+<div id="card-container"></div>
+
+<script>
+  function generateCard() {
+    // フォームの値を取得
+    const nameValue = document.getElementById('name').value.trim();
+    const categoryValue = document.getElementById('category').value.trim();
+    const corporateValue = document.getElementById('corporate').value.trim();
+
+    // 入力チェック
+    if (!nameValue) {
+      alert('名前を入力してください');
+      return;
+    }
+
+    // 名札要素を生成
+    const card = document.createElement('div');
+    card.className = 'business-card';
+
+    // --- ロゴ画像を追加 ---
+    const logoElem = document.createElement('img');
+    logoElem.src = 'https://i.gyazo.com/f55075317a5ba60169f8d9e59bbe403c.png'; 
+    logoElem.alt = 'ロゴ';
+    logoElem.className = 'logo';
+    card.appendChild(logoElem);
+
+    // テキスト全体を包むコンテナ
+    const textContainer = document.createElement('div');
+    textContainer.className = 'text-container';
+
+    // --- 名前要素 ---
+    const nameElem = document.createElement('div');
+    nameElem.className = 'name';
+    nameElem.textContent = nameValue;
+    textContainer.appendChild(nameElem);
+
+    // --- カテゴリー要素 (あれば) ---
+    if (categoryValue) {
+      const categoryElem = document.createElement('div');
+      categoryElem.className = 'category';
+      categoryElem.textContent = categoryValue;
+      textContainer.appendChild(categoryElem);
+    }
+
+    // --- 法人名要素 (あれば) ---
+    if (corporateValue) {
+      const corporateElem = document.createElement('div');
+      corporateElem.className = 'corporate';
+      corporateElem.textContent = corporateValue;
+      textContainer.appendChild(corporateElem);
+    }
+
+    // テキストコンテナをカードに追加
+    card.appendChild(textContainer);
+
+    // --- 作成した名札を表示コンテナに追加 ---
+    const container = document.getElementById('card-container');
+    container.appendChild(card);
+  }
+</script>
+
+</body>
+</html>
