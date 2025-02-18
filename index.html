@@ -145,7 +145,8 @@
 
     // --- ロゴ画像を追加 ---
     const logoElem = document.createElement('img');
-    logoElem.src = 'https://www.dropbox.com/scl/fi/18kylx41s0bgrv4rwudos/BULLUP.png?rlkey=h8gt06joy8wvyd3brxuksnwq5&st=neagxjcg&dl=0'; 
+    // Dropboxの共有リンクの末尾をdl=1に変更して直接画像にアクセス
+    logoElem.src = 'https://www.dropbox.com/scl/fi/18kylx41s0bgrv4rwudos/BULLUP.png?rlkey=h8gt06joy8wvyd3brxuksnwq5&e=1&st=ehklirmy&dl=1';
     logoElem.alt = 'ロゴ';
     logoElem.className = 'logo';
     card.appendChild(logoElem);
